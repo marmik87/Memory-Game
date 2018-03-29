@@ -4,14 +4,18 @@
 
 let cards = [...document.querySelectorAll(".card")]; //array of all cards
 const deck = document.querySelector(".deck");
-const counterDisplay = document.querySelector(".moves");
+const movesDisplay = document.querySelector(".moves");
+const timeDisplay = document.getElementById("timeDisplay");
 let openCards = []; //array of open cards
-let playable = true; //user can click on the cards
-let counter = 0; //number of moves
-let matchedPairs = 0; //number of all matched Pairs so far in the game
-let timing = false; //if timing is false, stopwatch is off
 let sec = 0; //counting seconds of playing
-let starRatio = document.querySelector(".stars").innerHTML;
+
+const game = {
+  moves: 0, //number of moves
+  matchedPairs: 0, //number of all matched Pairs so far in the game
+  timing: false, //if timing is false, stopwatch is off
+  playable: true, //user can click on the cards
+  starRatio: document.querySelector(".stars")
+}
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -27,23 +31,21 @@ function shuffle(array) {
   return array;
 };
 
-// Timer functionality from https://stackoverflow.com/questions/5517597/plain-count-up-timer-in-javascript
-
+// Timer / stopwatch
 function time(val) { //function to have a stopwatch in desired format 00:00
-  return val > 9 ? val : "0" + val;
+  return val > 9 ? val : `0${val}`;
 }
 
 let gameTime = setInterval(function() {
-  if (timing === true) { //start of counting time
-    document.getElementById("seconds").innerHTML = time(++sec % 60);
-    document.getElementById("minutes").innerHTML = time(parseInt(sec / 60, 10));
-  }
+  if (game.timing === true) { //start of counting time
+    timeDisplay.innerHTML = `${time(parseInt(sec / 60, 10))}:${time(++sec % 60)}`;
+  };
 }, 1000);
 
 //Counting the user's moves
-function counterIncrement() {
-  counterDisplay.textContent = ++counter; //actual moves visible to user
-  if ((counter == 14) || (counter == 17) || (counter == 20)) { //stars ratio
+function movesIncrement() {
+  movesDisplay.textContent = ++game.moves; //actual moves visible to user
+  if ((game.moves == 14) || (game.moves == 17) || (game.moves == 20)) { //stars ratio
     let stars = document.querySelector(".fa-star");
     stars.parentNode.removeChild(stars); //removing the star with the number of moves above
   };
@@ -56,8 +58,8 @@ for (const index in cards) {
 
 //Turning cards by user
 function userClick() {
-  timing = true; //starting the game timer
-  if ((this.classList.contains("open") === false) && playable) {
+  game.timing = true; //starting the game timer
+  if ((this.classList.contains("open") === false) && game.playable) {
     this.classList.add("open", "show");
     openCards.push(this); //filling the array of openCards for futher checking
     checkMatch();
@@ -72,7 +74,7 @@ function checkMatch() {
     } else {
       notMatch();
     };
-    counterIncrement(); //add a move to move counter
+    movesIncrement(); //add a move to move counter
   };
 };
 
@@ -85,20 +87,20 @@ function match() {
   openCards[1].classList.add("match");
   openCards[1].removeEventListener("click", userClick);
   openCards = []; //empty the array of open cards
-  matchedPairs += 1; //increment the number of all matched pairs
-  if (matchedPairs == 8) { //if all cards are matched
+  game.matchedPairs += 1; //increment the number of all matched pairs
+  if (game.matchedPairs == 8) { //if all cards are matched
     win();
   };
 };
 
 //Not Match
 function notMatch() {
-  playable = false; //no other cards can be clicked
+  game.playable = false; //no other cards can be clicked
   setTimeout(function() { //timeout to user to be able to see both opened cards
     openCards[0].classList.remove("open", "show"); //removing classes
     openCards[1].classList.remove("open", "show");
     openCards = []; //empty the array of open cards
-    playable = true; //all cards are clickable again
+    game.playable = true; //all cards are clickable again
   }, 1000);
 };
 
@@ -106,10 +108,9 @@ function notMatch() {
 function win() {
   clearInterval(gameTime); //stop the timer
   setTimeout(function() { //filling the modal with user stats
-    document.querySelector(".winMoves span").textContent = counter;
-    document.getElementById("winSecs").innerHTML = (sec % 60);
-    document.getElementById("winMins").innerHTML = parseInt(sec / 60);
-    document.querySelector(".winStars").innerHTML = starRatio;
+    document.querySelector(".winMoves span").textContent = game.moves;
+    document.getElementById("winTime").append(timeDisplay.textContent);
+    document.querySelector(".winStars").append(game.starRatio);
     $('#modal').modal({ //showing the modal to user
       show: true
     });

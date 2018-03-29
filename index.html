@@ -30,7 +30,7 @@
 
       <ul class="time">
         <li><i class="fas fa-stopwatch"></i></li>
-        <li><span id="minutes">00</span>:<span id="seconds">00</span></li>
+        <li id="timeDisplay">00:00</li>
       </ul>
 
       <div onclick="restart()" class="restart">
@@ -104,7 +104,7 @@
         <div class="modal-body text-center">
           <p>You won the game!</p>
           <p class="winMoves">Moves: <span></span></p>
-          <p class="winTime">Time: <span id="winMins"></span>:<span id="winSecs"></span></p>
+          <p class="winTime">Time: <span id="winTime"></span></p>
           <p class="winStars"></p>
         </div>
         <div class="modal-footer">
