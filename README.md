@@ -7,12 +7,13 @@ Simple Memory Game with 8 pairs of images.
 1. Cards are shuffled and laid down with symbols hidden. 
 2. User uncovers 2 cards.
 3. If it is match, the cards stay unhidden. If it is not match, symbols are hidden again and user has to remeber the symbols. 
-4. User can uncover only 2 cards at time. 
+4. User can uncover only 2 cards in one move. 
 5. The games continues until all 8 pairs are found and unhidden.
 6. When the all pairs are found, the modal with congratulation message is shown. This message also contains information about total number of moves, total time and stars ratio based on the number of moves made.
-7. User can play a game repeatedly.
-8. User can restart a game anytime.
-9. User see his/her stats during the game (moves, stars ratio and total time are shown above the deck of cards).
+7. Star Ratio: 3 stars are given when the number of moves is less than 14, 2 stars are less than 17, 1 star is less than 20. When user reaches 20 moves, no star is given.
+8. User can play a game repeatedly.
+9. User can restart a game anytime.
+10. User see his/her stats during the game (moves, stars ratio and total time are shown above the deck of cards).
 
 ## Functions
 - shuffling cards with symbols;
